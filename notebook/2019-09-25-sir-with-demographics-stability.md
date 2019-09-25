@@ -8,7 +8,7 @@ We can incorporate demographics into the SIR model by simply considering that ho
 
 <center>
 
-$\frac{dS}{dt} = \mu - \beta S I - \mu I$
+`\frac{dS}{dt} = \mu - \beta S I - \mu I`
 
 $\frac{dI}{dt} = \beta S I - \gamma I - \mu I$
 
