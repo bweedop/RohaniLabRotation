@@ -13,9 +13,9 @@ from sympy import *
 # time zero
 t0 = 0
 # end time
-tn = 120
+tn = 365
 # time step
-t_step = 5
+t_step = 1
 
 time_steps = range(t0, tn, t_step)
 
@@ -23,16 +23,16 @@ time_steps = range(t0, tn, t_step)
 # Instantaneous, constant params
 
 # Transmission rate
-beta = 0.3
+beta = 1.65
 # Recovery rate
-gamma = 1/7
+gamma = 0.4545
 
 # State variables - initial
 
 # Proportion of susceptibles
-s0 = 9999/10000
+s0 = 0.9999
 # Proportion of infecteds
-i0 = 1/10000
+i0 = 0.0001
 # Proportion of recovereds
 r0 = 0.0
 
@@ -55,3 +55,21 @@ plt.ylabel("Proportion of Population")
 plt.legend(("Susceptibles", "Infecteds", "Recovered"),
            loc = "upper right")
 plt.savefig("closed-sir.png")
+
+##########################################
+# Multiple values of beta and gamma plot #
+##########################################
+
+# Transmission rate
+beta_values = [2**x for x in range(5, 9)]
+# Recovery rate
+gamma_values = [0.33, 0.11, 0.055, 0.037]
+
+fig, axs = plt.subplots(4, 4)
+fig.suptitle("SIR over multiple values")
+for beta in beta_values:
+    for gamma in gamma_values:
+        sol = odeint(closed_sir, init_params, time_steps)
+        axs[beta_values.index(beta), gamma_values.index(gamma)].plot(sol)
+        axs[beta_values.index(beta), gamma_values.index(gamma)].set_title('Beta:{} Gamma:{}'.format(beta, gamma))
+plt.savefig("mutliple-plots.png")
