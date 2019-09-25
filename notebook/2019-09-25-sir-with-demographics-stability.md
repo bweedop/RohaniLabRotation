@@ -7,8 +7,8 @@ When new hosts being introduced into or removed from the population over time, w
 We can incorporate demographics into the SIR model by simply considering that hosts have a natural lifespan ($1/\mu$; which is currently at about 71 years of age). This leads to the *rate* at which hosts suffer natural mortality (does not reflect mortality by pathogen) in each compartment of the model, $\mu$. Many epidemiologists use this value to represent the birth rate as well. This is to set up conditions where the population does not grow or decline over time.
 
 <center>
-  
-$\frac{dS}{dt} = \mu - \beta \text{S} \text{I} - \mu \text{I}$
+
+$\frac{dS}{dt} = \mu - \beta S I - \mu I$
 
 $\frac{dI}{dt} = \beta S I - \gamma I - \mu I$
 
@@ -42,6 +42,9 @@ $0 = I (\beta S - (\gamma + \mu))$
 
 this statement is made true if I = 0 or S assumes a value that makes the equation zero ($\frac{\gamma + \mu}{\beta}$).
 
+## Stability Properties
+
+We now know the conditions by which we have equilibrium (disease-free and endemic) and the restrictions on parameter values for these equilibria to be biologically meaningful. One thing that we may want to know is how likely we are to observe conditions on parameter values necessary for the equilibrium to be stable to small perturbations. In order to analyze each equilibrium point we need to utilize "stability analysis." The basic idea behind stability analysis can be seen in MID Box 2.4. 
 
 ## Questions
 
