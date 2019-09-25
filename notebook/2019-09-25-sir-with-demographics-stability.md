@@ -7,10 +7,9 @@ When new hosts being introduced into or removed from the population over time, w
 We can incorporate demographics into the SIR model by simply considering that hosts have a natural lifespan ($1/\mu$; which is currently at about 71 years of age). This leads to the *rate* at which hosts suffer natural mortality (does not reflect mortality by pathogen) in each compartment of the model, $\mu$. Many epidemiologists use this value to represent the birth rate as well. This is to set up conditions where the population does not grow or decline over time.
 
 <center>
+  
+$\frac{dS}{dt} = \mu - \beta \text{S} \text{I] - \mu \text{I}$
 
-```{latex}
-\frac{dS}{dt} = \mu - \beta S I - \mu I
-```
 $\frac{dI}{dt} = \beta S I - \gamma I - \mu I$
 
 $\frac{dR}{dt} = \gamma I - \mu R$
