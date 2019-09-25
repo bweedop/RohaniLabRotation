@@ -4,8 +4,8 @@ import numpy as np
 from scipy.integrate import odeint
 
 # Constant parameters
-beta = 0.75
-gamma = 0.1428
+beta = 1.3
+gamma = 0.333
 mu = 0.0003
 
 # Setting up time range
@@ -34,9 +34,8 @@ sol = odeint(demographics_sir, init_params, t_span)
 
 # Plotting results
 fig, axs = plt.subplots(3)
-fig.suptitle('SIR Model With Demographics')
+fig.suptitle('SIR Model With Demographics (Beta: {}, Gamma: {})'.format(beta, gamma))
 axs[0].plot(sol[:,0])
 axs[1].plot(sol[:,1])
 axs[2].plot(sol[:,2])
-axs[2].xlabel('time (days)')
 plt.savefig("demographics-sir.png")
