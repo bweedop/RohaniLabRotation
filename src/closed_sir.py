@@ -14,7 +14,7 @@ import pandas as pd
 # time zero
 t0 = 0
 # end time
-tn = 120
+tn = 14
 # time step
 t_step = 1
 
@@ -24,16 +24,16 @@ time_steps = range(t0, tn, t_step)
 # Instantaneous, constant params
 
 # Transmission rate
-beta = 1.65
+beta = 1.66
 # Recovery rate
 gamma = 0.4545
 
 # State variables - initial
 
 # Proportion of susceptibles
-s0 = 0.9999
+s0 = 752/753
 # Proportion of infecteds
-i0 = 0.0001
+i0 = 1/753
 # Proportion of recovereds
 r0 = 0.0
 
@@ -51,13 +51,14 @@ sol = odeint(closed_sir, init_params, time_steps)
 
 # Plot the results in one figure
 plt.plot(sol)
-plt.title(r"Simple SIR without demographics ($\beta$: {}, $\gamma$: {})".format(beta
-                                                                         , gamma))
+data = pd.read_csv("data/boarding-school.csv")
+plt.scatter(data['day'], data['cases']/753)
+plt.title("Simple SIR without demographics\n" +r"($\beta$: {}, $\gamma$: {})".format(beta, gamma))
 plt.xlabel("time (days)")
 plt.ylabel("Proportion of Population")
 plt.legend(("Susceptibles", "Infecteds", "Recovered"),
            loc = "upper right")
-plt.savefig("closed-sir.png")
+plt.savefig("figures/closed-sir.png")
 
 ##########################################
 # Multiple values of beta and gamma plot #
@@ -90,4 +91,4 @@ for beta in beta_values:
         axs[beta_values.index(beta), gamma_values.index(gamma)].plot(sol)
         axs[beta_values.index(beta), gamma_values.index(gamma)].set_title(r'$\beta$:{} $\gamma$:{}'.format(beta, gamma))
 plt.figure(num = 2, figsize=(9,6))
-plt.savefig("mutliple-plots.png", dpi = 300)
+#plt.savefig("mutliple-plots.png", dpi = 300)
