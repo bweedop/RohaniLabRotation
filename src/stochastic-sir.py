@@ -1,9 +1,12 @@
-import random as rd
-import matplotlib.pyplot as pyplot
+import matplotlib.pyplot as plt
 import numpy as np
 from scipy.integrate import odeint
+import pandas as pd
+import random as rd
 
-# set random seed for reproducibility
 rd.seed(1881)
 
-
+def sir_onestep (x, params):
+    num_sus = x[1]
+    num_inf = x[2]
+    

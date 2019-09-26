@@ -33,9 +33,13 @@ def demographics_sir (params, t):
 sol = odeint(demographics_sir, init_params, t_span)
 
 # Plotting results
-fig, axs = plt.subplots(3)
-fig.suptitle('SIR Model With Demographics (Beta: {}, Gamma: {})'.format(beta, gamma))
-axs[0].plot(sol[:,0])
-axs[1].plot(sol[:,1])
-axs[2].plot(sol[:,2])
+fig, axs = plt.subplots(3, sharex=True)
+fig.suptitle(r'SIR Model With Demographics ($\beta$: {}, $\gamma$: {})'.format(beta, gamma))
+axs[0].title.set_text("Susceptible")
+axs[0].plot(sol[:,0], color = "green")
+axs[1].title.set_text("Infected")
+axs[1].plot(sol[:,1], color = "red")
+axs[2].title.set_text("Recovered")
+axs[2].plot(sol[:,2], color = "orange")
+plt.subplots_adjust(hspace = 0.4)
 plt.savefig("demographics-sir.png")
