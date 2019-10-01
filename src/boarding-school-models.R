@@ -1,11 +1,27 @@
 #!/usr/bin/R
+
+################################################################################
+# boarding-school-models.R - This script is intended to fit a number of        #
+#                            epidemiological models to real data (boarding     #
+#                            school, London, 1978). The model coeficients will #
+#                            be estimated using maximum likelihood as          #
+#                            implemented by the 'bbmle' package.               #
+################################################################################
+
 library(xtable)
 library(deSolve)
 library(data.table)
 library(bbmle)
 
-data <- read.csv("data/boarding-school.csv")
+# Load the boarding school data
+flu.data <- read.csv("data/boarding-school.csv")
 
+################################################################################
+# SIR model with no vital dynamics                                             #
+# Beta and gamma estimated using maximum likelihood                            #
+################################################################################
+
+# Closed (no vital dynamics) SIR model
 closed.sir <- function (t, states, params) {
     s0 <- states[1]
     i0 <- states[2]
@@ -20,6 +36,7 @@ closed.sir <- function (t, states, params) {
     list(c(dS, dI, dR))
 }
 
+# mle.sir - Maximum likelihood estimation function for closed SIR model
 mle.sir <- function(b, g) {
     t <- seq(0, 14)    
     beta <- exp(b)
@@ -29,26 +46,42 @@ mle.sir <- function(b, g) {
                              times=t, 
                              closed.sir,
                              parms=c(beta, gamma)))
-    nll <- -sum(dpois(x=data$cases, lambda=tail(results$I, 14),  log=TRUE))
+    nll <- -sum(dpois(x=flu.data$cases, lambda=tail(results$I, 14), log=TRUE))
     return(nll)
     #return(results)
 }
 
+# initial - Initial estimates of beta and gamma
 initial <- list(b=-6, g=-0.7)
+# fit0 - preliminary fit of model to data using the initial estimates
 fit0 <- mle2(mle.sir, start=initial)
-
+# fit - subsequent fit using the estimation of parameters returned from fit0
 fit <- mle2(mle.sir, start=as.list(coef(fit0)))
+# pred - model estimates using the estimated beta and gamma values
+pred <- as.data.frame(ode(c(S=762, I=1, R=0), 
+                      times=seq(0, 14, 0.5), 
+                      closed.sir, 
+                      parms=c(exp(coef(fit)))))
 
-pred <- as.data.frame(ode(c(S=762, I=1, R=0), times=seq(0, 14, 0.5), closed.sir, parms=c(exp(coef(fit)))))
+# Plotting raw data
+plot(cases~day, data=flu.data, type="b", ylab="Individuals in each class")
+# Plotting model predictions
+lines(pred$I~pred$time, col="red")
 
-plot(cases~day, data=data, type="b", ylab="Infected")
-lines(pred$I~pred$time)
-
+# Final estimates of beta and gamma
 sir.beta <- as.numeric(exp(coef(fit)[1])*763)
 sir.gamma <- as.numeric(exp(coef(fit)[2]))
+# Final negative log-likelihood
 sir.nll <- as.numeric(logLik(fit))
+# AIC score for simple SIR model
 sir.aic <- AIC(fit)
 
+################################################################################
+# SEIR Model with no vital dynamics (mu = 0)                                   #
+# Beta, gamma, sigma estimated using maximum likelihood                        #
+################################################################################
+
+# closed.seir - Initializing SEIR model to be used with deSolve
 closed.seir <- function(t, states, params) {
     s0 <- states[1]
     e0 <- states[2]
@@ -67,6 +100,8 @@ closed.seir <- function(t, states, params) {
     list(c(dS, dE, dI, dR))
 }
 
+# mle.seir - function to use for maximum likelihood estimation. Returns negative 
+#            log-likelihood which is used to optimize coefficients 
 mle.seir <- function(b, g, s) {
     t <- seq(0, 14)    
     beta <- exp(b)
@@ -77,9 +112,8 @@ mle.seir <- function(b, g, s) {
                              times=t, 
                              closed.seir,
                              parms=c(beta, gamma, sigma)))
-    nll <- -sum(dpois(x=data$cases, lambda=tail(results$I, 14),  log=TRUE))
+    nll <- -sum(dpois(x=flu.data$cases, lambda=tail(results$I, 14), log=TRUE))
     return(nll)
-    #return(results)
 }
 
 initial <- list(b=-6, g=-0.7, s=-0.9)
@@ -87,13 +121,25 @@ fit0.seir <- mle2(mle.seir, start=initial)
 
 fit.seir <- mle2(mle.seir, start=as.list(coef(fit0.seir)))
 
-pred.seir <- as.data.frame(ode(c(S=762, E=2, I=1, R=0), times=seq(0, 14, 0.5), closed.seir, parms=c(exp(coef(fit.seir)))))
+pred.seir <- as.data.frame(ode(c(S=762, E=2, I=1, R=0), 
+                               times=seq(0, 14, 0.5), 
+                               closed.seir,
+                               parms=c(exp(coef(fit.seir)))))
 
-plot(cases~day, data=data, type="b", ylab="Proportion Infected")
-lines(pred.seir$I~pred.seir$time)
+plot(cases~day, data=flu.data, type="b", ylab="Proportion Infected")
+lines(pred.seir$I~pred.seir$time, col="red")
 
 seir.beta <- as.numeric(exp(coef(fit.seir)[1]))
 seir.gamma <- as.numeric(exp(coef(fit.seir)[2]))
 seir.sigma <- as.numeric(exp(coef(fit.seir)[3]))
 seir.nll <- as.numeric(logLik(fit.seir))
 seir.aic <- AIC(fit.seir)
+
+################################################################################
+# SICR with no vital dynamics (mu = 0)                                         #
+################################################################################
+
+################################################################################
+# Create LateX table with xtable for all models and accompanying values        #
+################################################################################
+

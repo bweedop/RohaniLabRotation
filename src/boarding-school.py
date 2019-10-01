@@ -44,7 +44,6 @@ sol = odeint(closed_sir, (S0, I0, R0), t_data, args=(beta, gamma))
 residuals = (data['cases']/763 - sol[:,1])**2
 rss = np.sum(residuals)
 
-
 # Plot the results in one figure
 plt.plot(sol)
 plt.scatter(t_data, i_data)
