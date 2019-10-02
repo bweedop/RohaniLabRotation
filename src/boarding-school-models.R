@@ -8,10 +8,12 @@
 #                            implemented by the 'bbmle' package.               #
 ################################################################################
 
-library(xtable)
-library(deSolve)
-library(data.table)
-library(bbmle)
+packages <- c("xtable", "deSolve", "data.table", "bbmle")
+packages.to.install <- packages[!(packages %in% installed.packages()[,"Package"])]
+if (length(packages.to.install)) {
+    install.packages(packages.to.install)
+}
+invisible(lapply(packages, require, character.only = TRUE))
 
 # Load the boarding school data
 flu.data <- read.csv("data/boarding-school.csv")
