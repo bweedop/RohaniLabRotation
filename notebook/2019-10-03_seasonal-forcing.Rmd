@@ -1,0 +1,23 @@
+---
+title: Model Likelihood Comparison
+output: pdf_document
+author: K. Bodie Weedop
+date: 10/03/2019
+---
+
+## Model Likelihood Comparison
+
+```{r kable, echo=FALSE}
+kable(ml.df, digits=3, col.names=c("Model", "${R}_0$", "-ln(L)", "AIC", "$\\beta$", "$\\gamma$", "$\\sigma$"))
+```
+
+```{r, echo=FALSE}
+par(mfrow=c(3,1), pin = c(10, 1.5), mai = c(0, 0.6, 0, 0.1), mar=c(0.5, 4, 2, 0.5), oma = c(0.5, 0, 0, 0.1))
+plot(out[, 2] ~ out[, 1], type="l", col = "blue", xaxt = "n", xlab = "", ylab = "S")
+par(mar=c(0.5, 4, 0, 0.5))
+plot(out[, 3] ~ out[, 1], type = "l", col = "red", xaxt = "n", xlab = "", ylab = "I")
+par(mar=c(4, 4, 0.5, 0.5))
+plot(out[, 4] ~ out[, 1], type = "l", col = "green", xlab = "time (days)", xaxt = "n", ylab = "R")
+xticks <- seq(0, 20*365, 365)
+axis(1, at=xticks)
+```
