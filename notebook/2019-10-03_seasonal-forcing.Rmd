@@ -8,8 +8,12 @@ date: 10/03/2019
 ## Model Likelihood Comparison
 
 ```{r kable, echo=FALSE}
-kable(ml.df, digits=3, col.names=c("Model", "${R}_0$", "-ln(L)", "AIC", "$\\beta$", "$\\gamma$", "$\\sigma$"))
+kable(ml.df, digits=3, col.names=c("Model", "${R}_0$", "-ln(L)", "AIC", "$\\beta$", "$\\gamma$", "$\\zeta$", "$\\sigma$"))
 ```
+
+Table 1. __Model Fit Comparison.__ Model selection criteria (negative log-likelihood and AIC) and parameter estimates for each model. 
+
+\newpage
 
 ```{r, echo=FALSE}
 par(mfrow=c(3,1), pin = c(10, 1.5), mai = c(0, 0.6, 0, 0.1), mar=c(0.5, 4, 2, 0.5), oma = c(0.5, 0, 0, 0.1))
@@ -21,3 +25,7 @@ plot(out[, 4] ~ out[, 1], type = "l", col = "green", xlab = "time (days)", xaxt 
 xticks <- seq(0, 20*365, 365)
 axis(1, at=xticks)
 ```
+
+Figure 1. __Seasonality in SIR model.__ Beta0 = 1.65, Beta1 = 0.05, Gamma = 0.08 
+
+Next step will be to do the bifurcation diagram...
