@@ -66,7 +66,7 @@ pred <- as.data.frame(ode(c(S=762, I=1, R=0),
                       parms=c(exp(coef(fit)))))
 
 # Plotting raw data
-plot(cases~day, data=flu.data, type="b", ylab="Individuals in each class")
+plot(cases~day, data=flu.data, type="b", ylab="Numbers of Infecteds")
 # Plotting model predictions
 lines(pred$I~pred$time, col="red")
 
@@ -125,12 +125,12 @@ fit0.seir <- mle2(mle.seir, start=initial)
 
 fit.seir <- mle2(mle.seir, start=as.list(coef(fit0.seir)))
 
-pred.seir <- as.data.frame(ode(c(S=760, E=2, I=1, R=0), 
+pred.seir <- as.data.frame(ode(c(S=761, E=1, I=1, R=0), 
                                times=seq(0, 14, 0.5), 
                                closed.seir,
                                parms=c(exp(coef(fit.seir)))))
 
-plot(cases~day, data=flu.data, type="b", ylab="Proportion Infected")
+plot(cases~day, data=flu.data, type="b", ylab="Number of Infecteds")
 lines(pred.seir$I~pred.seir$time, col="red")
 
 seir.beta <- as.numeric(exp(coef(fit.seir)[1])*763)
@@ -155,7 +155,7 @@ closed.sicr <- function(t, states, params) {
     zeta <- params[3]
     mu <- 0
 
-    dS <- mu - (beta * i0 + mu) * s0
+    dS <- mu - beta * s0 * i0 + mu * s0
     dI <- beta * s0 * i0 - zeta * i0 - mu * i0
     dC <- zeta * i0 - gamma * c0
     dR <- gamma * c0 - mu * r0
@@ -164,40 +164,6 @@ closed.sicr <- function(t, states, params) {
 
 # mle.sicr - function to use for maximum likelihood estimation. Returns negative 
 #            log-likelihood which is used to optimize coefficients 
-mle.sicr <- function(b, g, z) {
-    t <- seq(0, 14)    
-    beta <- exp(b)
-    gamma <- exp(g)
-    zeta <- exp(z)
-
-    results <- as.data.frame(ode(y=c(S=761, I=1, C=0, R=0), 
-                             times=t, 
-                             closed.sicr,
-                             parms=c(beta, gamma, zeta)))
-    nll <- -sum(dpois(x=flu.data$cases, lambda=tail(results$I, 14), log=TRUE))
-    return(nll)
-}
-
-initial <- list(b=-5, g=-0.45, z=-0.45)
-fit0.sicr <- mle2(mle.sicr, start=initial)
-
-fit.sicr <- mle2(mle.sicr, start=as.list(coef(fit0.sicr)))
-
-pred.sicr <- as.data.frame(ode(c(S=761, I=1, C=0, R=0), 
-                               times=seq(0, 14, 0.5), 
-                               closed.sicr,
-                               parms=c(exp(coef(fit.sicr)))))
-
-plot(cases~day, data=flu.data, type="b", ylab="Proportion Infected")
-lines(pred.sicr$I~pred.sicr$time, col="red")
-
-sicr.beta <- as.numeric(exp(coef(fit.sicr)[1]))
-sicr.gamma <- as.numeric(exp(coef(fit.sicr)[2]))
-sicr.zeta <- as.numeric(exp(coef(fit.sicr)[3]))
-sicr.r0 <- sicr.beta/sicr.gamma
-sicr.nll <- as.numeric(logLik(fit.sicr))
-sicr.aic <- AIC(fit.sicr)
-
 
 # closed.sicr - Initializing sicr model to be used with deSolve
 closed.sicr <- function(t, states, params) {
@@ -213,7 +179,7 @@ closed.sicr <- function(t, states, params) {
 
     dS <- mu - (beta * i0 + mu) * s0
     dI <- beta * s0 * i0 - zeta * i0 - mu * i0
-    dC <- zeta * i0 - gamma * c0
+    dC <- zeta * i0 - gamma * c0 - mu * c0
     dR <- gamma * c0 - mu * r0
     list(c(dS, dI, dC, dR))
 }
@@ -226,31 +192,31 @@ mle.sicr <- function(b, g, z) {
     gamma <- exp(g)
     zeta <- exp(z)
 
-    results <- as.data.frame(ode(y=c(S=761, I=1, C=0, R=0), 
+    results <- as.data.frame(ode(y=c(S=762, I=1, C=1, R=0), 
                              times=t, 
                              closed.sicr,
                              parms=c(beta, gamma, zeta)))
-    nll <- -sum(dpois(x=flu.data$cases, lambda=tail(results$I, 14), log=TRUE))
+    nll <- -sum(dpois(x=flu.data$cases, lambda=tail(results$C, 14), log=TRUE))
     return(nll)
 }
 
-initial <- list(b=-5, g=-0.45, z=-0.45)
+initial <- list(b=-4, g=-0.7, z=-0.05)
 fit0.sicr <- mle2(mle.sicr, start=initial)
 
 fit.sicr <- mle2(mle.sicr, start=as.list(coef(fit0.sicr)))
 
-pred.sicr <- as.data.frame(ode(c(S=761, I=1, C=0, R=0), 
+pred.sicr <- as.data.frame(ode(c(S=762, I=1, C=0, R=0), 
                                times=seq(0, 14, 0.5), 
                                closed.sicr,
                                parms=c(exp(coef(fit.sicr)))))
 
-plot(cases~day, data=flu.data, type="b", ylab="Proportion Infected")
+plot(cases~day, data=flu.data, type="b", ylab="Number of Infecteds")
 lines(pred.sicr$I~pred.sicr$time, col="red")
 
 sicr.beta <- as.numeric(exp(coef(fit.sicr)[1])*763)
 sicr.gamma <- as.numeric(exp(coef(fit.sicr)[2]))
 sicr.zeta <- as.numeric(exp(coef(fit.sicr)[3]))
-sicr.r0 <- sicr.beta/sicr.zeta
+sicr.r0 <- sicr.beta/sicr.gamma
 sicr.nll <- as.numeric(logLik(fit.sicr))
 sicr.aic <- AIC(fit.sicr)
 
