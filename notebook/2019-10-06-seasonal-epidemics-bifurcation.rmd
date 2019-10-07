@@ -1,0 +1,186 @@
+---
+layout: article
+output: pdf_document
+title: Seasonally Forced Epidemics and Bifurcation Diagram
+author: K. Bodie Weedop
+date: 10/6/2019
+---
+
+```{r, echo=FALSE}
+library(deSolve)
+```
+
+```{r, echo=TRUE}
+# Function for diff. eqs.; Passed below to ode()
+seasonal.sir <- function(t, vars, params) {
+    # Getting initial values for variables
+    s0 <- vars[1]
+    i0 <- vars[2]
+    r0 <- vars[3]
+
+    # Getting value of beta(t) and other parameter values
+    b_t <- betafx(beta0 = params[1], beta1 = params[2], t = t)
+    gamma <- params[3]
+    mu <- params[4]
+
+    # Differential equations for model
+    dS <- mu - b_t * s0 * i0 - mu * s0
+    dI <- b_t * s0 * i0 - gamma * i0 - mu * i0
+    dR <- gamma * i0 - mu * r0
+    return(list(c(dS, dI, dR)))
+}
+```
+
+```{r, echo=TRUE}
+# Function for forcing function; Omega set so that oscillations are annual.
+betafx <- function(beta0, beta1, t) {
+    omega <- (2*pi)/365
+    return(beta0 * (1 + beta1 * cos(omega * t)))
+}
+```
+
+```{r, echo=TRUE}
+# Initial values for variables
+s0 <- 0.06
+i0 <- 0.001
+r0 <- 1-s0-i0
+init.vars <- c(S = s0, I = i0, R = r0)
+
+# Time to run model simulation; Allowed to run for 100 years.
+years <- 1000
+t_range <- seq(0, years*365, 1)
+
+# Parameter values
+b0 <- 1.6
+b1 <- 0.05
+g <- 0.08
+m <- 1/(70*365)
+params <- c(beta0 = b0, beta1 = b1, gamma = g, mu = m)
+```
+
+```{r, echo=TRUE}
+# Run simulation
+out <- ode(y = init.vars, 
+           times = t_range, 
+           func = seasonal.sir, 
+           parms = params)
+```
+
+```{r, echo=TRUE}
+# Plotting
+# Each variable (S, I, R) will be plotted individually over total time 
+#    simulation allowed to run.
+par(mfrow=c(3,1), 
+    pin = c(10, 1.5), 
+    mai = c(0, 0.6, 0, 0.1), 
+    mar = c(0.5, 4, 2, 0.5), 
+    oma = c(0.5, 0, 0, 0.1))
+plot(out[, 2] ~ out[, 1], 
+     type = "l", 
+     col = "blue", 
+     xaxt = "n", 
+     xlab = "", 
+     ylab = "S")
+par(mar=c(0.5, 4, 0, 0.5))
+plot(out[, 3] ~ out[, 1], 
+     type = "l", 
+     col = "red", 
+     xaxt = "n", 
+     xlab = "", 
+     ylab = "I")
+par(mar=c(4, 4, 0.5, 0.5))
+plot(out[, 4] ~ out[, 1], 
+     type = "l", 
+     col = "green", 
+     xlab = "time (days)", 
+     xaxt = "n", 
+     ylab = "R")
+xticks <- seq(0, years*365, 365)
+axis(1, at=xticks)
+```
+
+I selected a ten year window (years 980 through 990) of the simulation where the oscillations had stabilized. The window selected can be seen indicated with the red lines on the same plot below.
+
+```{r, echo=FALSE}
+window <- c(980, 990)
+# Plotting
+# Each variable (S, I, R) will be plotted individually over total time 
+#    simulation allowed to run.
+par(mfrow=c(3,1), 
+    pin = c(10, 1.5), 
+    mai = c(0, 0.6, 0, 0.1), 
+    mar = c(0.5, 4, 2, 0.5), 
+    oma = c(0.5, 0, 0, 0.1))
+plot(out[, 2] ~ out[, 1], 
+     type = "l", 
+     col = "blue", 
+     xaxt = "n", 
+     xlab = "", 
+     ylab = "S")
+abline(v = window[1]*365, col = "red")
+abline(v = window[2]*365, col = "red")
+par(mar=c(0.5, 4, 0, 0.5))
+plot(out[, 3] ~ out[, 1], 
+     type = "l", 
+     col = "red", 
+     xaxt = "n", 
+     xlab = "", 
+     ylab = "I")
+abline(v = window[1]*365, col = "red")
+abline(v = window[2]*365, col = "red")
+par(mar=c(4, 4, 0.5, 0.5))
+plot(out[, 4] ~ out[, 1], 
+     type = "l", 
+     col = "green", 
+     xlab = "time (days)", 
+     xaxt = "n", 
+     ylab = "R")
+abline(v = window[1]*365, col = "red")
+abline(v = window[2]*365, col = "red")
+xticks <- seq(0, years*365, 365)
+axis(1, at=xticks)
+```
+
+```{r, echo=TRUE}
+bif.points <- function(amp) {
+    # Parameter values
+    b0 <- 1.6
+    b1 <- amp
+    g <- 0.08
+    m <- 1/(70*365)
+    params <- c(beta0 = b0, beta1 = b1, gamma = g, mu = m)
+
+    # Run simulation
+    out <- ode(y = init.vars, 
+               times = t_range, 
+               func = seasonal.sir, 
+               parms = params)
+
+    # Ten year window
+    data.window <- as.data.frame(out[(window[1]*365+1):(window[2]*365+1),])
+    # Sampling regular intervals of the ten year window
+    samples <- rep(NA, 10)
+    for (i in 1:(length(samples))) {
+        samples[i] <- round(data.window$I[365*i], 5)
+    }
+    return(unique(samples))
+}
+
+# Different values for amplitude of seasonality
+b1_vals <- seq(0.01, 0.30, 0.001)
+
+dat <- data.frame()
+for (i in b1_vals) {
+    temp <- bif.points(i)
+    for(j in temp) {
+        dat <- rbind(dat, c(i, j))
+    }
+}
+
+colnames(dat) <- c("beta1", "I")
+
+plot(log(dat$I) ~ dat$beta1, 
+     xlab = "Amplitude of Seasonality (w)",
+     ylab = "Log10 Proportion Infected (I)",
+     pch = "'")
+```
