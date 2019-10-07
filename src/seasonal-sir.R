@@ -32,7 +32,7 @@ s0 <- 0.06
 i0 <- 0.001
 r0 <- 1-s0-i0
 
-t_range <- seq(0, 20*365, 1)
+t_range <- seq(0, 50*365, 1)
 
 initial.states <- c(S = s0, I = i0, R = r0)
 
@@ -47,6 +47,6 @@ par(mar=c(0.5, 4, 0, 0.5))
 plot(out[, 3] ~ out[, 1], type = "l", col = "red", xaxt = "n", xlab = "", ylab = "I")
 par(mar=c(4, 4, 0.5, 0.5))
 plot(out[, 4] ~ out[, 1], type = "l", col = "green", xlab = "time (days)", xaxt = "n", ylab = "R")
-xticks <- seq(0, 20*365, 365)
+xticks <- seq(0, 50*365, 365)
 axis(1, at=xticks)
 dev.off()

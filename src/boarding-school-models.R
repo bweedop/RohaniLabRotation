@@ -143,27 +143,6 @@ seir.aic <- AIC(fit.seir)
 ################################################################################
 # SICR with no vital dynamics (mu = 0)                                         #
 ################################################################################
-# closed.sicr - Initializing sicr model to be used with deSolve
-closed.sicr <- function(t, states, params) {
-    s0 <- states[1]
-    i0 <- states[2]
-    c0 <- states[3]
-    r0 <- states[4]
-
-    beta <- params[1]
-    gamma <- params[2]
-    zeta <- params[3]
-    mu <- 0
-
-    dS <- mu - beta * s0 * i0 + mu * s0
-    dI <- beta * s0 * i0 - zeta * i0 - mu * i0
-    dC <- zeta * i0 - gamma * c0
-    dR <- gamma * c0 - mu * r0
-    list(c(dS, dI, dC, dR))
-}
-
-# mle.sicr - function to use for maximum likelihood estimation. Returns negative 
-#            log-likelihood which is used to optimize coefficients 
 
 # closed.sicr - Initializing sicr model to be used with deSolve
 closed.sicr <- function(t, states, params) {
@@ -175,32 +154,34 @@ closed.sicr <- function(t, states, params) {
     beta <- params[1]
     gamma <- params[2]
     zeta <- params[3]
+    eta <- params[4]
     mu <- 0
 
-    dS <- mu - (beta * i0 + mu) * s0
-    dI <- beta * s0 * i0 - zeta * i0 - mu * i0
-    dC <- zeta * i0 - gamma * c0 - mu * c0
-    dR <- gamma * c0 - mu * r0
+    dS <- mu - beta * s0 * i0 - mu * s0
+    dI <- beta * s0 * i0 - (mu + gamma + eta) * i0
+    dC <- eta * i0 - zeta * c0
+    dR <- gamma * i0 + zeta * c0 - mu * r0
     list(c(dS, dI, dC, dR))
 }
 
 # mle.sicr - function to use for maximum likelihood estimation. Returns negative 
 #            log-likelihood which is used to optimize coefficients 
-mle.sicr <- function(b, g, z) {
+mle.sicr <- function(b, g, z, e) {
     t <- seq(0, 14)    
     beta <- exp(b)
     gamma <- exp(g)
     zeta <- exp(z)
+    eta <- exp(e)
 
-    results <- as.data.frame(ode(y=c(S=762, I=1, C=1, R=0), 
+    results <- as.data.frame(ode(y=c(S=762, I=1, C=0, R=0), 
                              times=t, 
                              closed.sicr,
-                             parms=c(beta, gamma, zeta)))
+                             parms=c(beta, gamma, zeta, eta)))
     nll <- -sum(dpois(x=flu.data$cases, lambda=tail(results$C, 14), log=TRUE))
     return(nll)
 }
 
-initial <- list(b=-4, g=-0.7, z=-0.05)
+initial <- list(b=-5.76, g=-12, z=-0.78, e=-0.0857)
 fit0.sicr <- mle2(mle.sicr, start=initial)
 
 fit.sicr <- mle2(mle.sicr, start=as.list(coef(fit0.sicr)))
@@ -210,15 +191,85 @@ pred.sicr <- as.data.frame(ode(c(S=762, I=1, C=0, R=0),
                                closed.sicr,
                                parms=c(exp(coef(fit.sicr)))))
 
+png("sicr-model.png")
 plot(cases~day, data=flu.data, type="b", ylab="Number of Infecteds")
-lines(pred.sicr$I~pred.sicr$time, col="red")
+lines(pred.sicr$C~pred.sicr$time, col="red")
+dev.off()
 
 sicr.beta <- as.numeric(exp(coef(fit.sicr)[1])*763)
 sicr.gamma <- as.numeric(exp(coef(fit.sicr)[2]))
 sicr.zeta <- as.numeric(exp(coef(fit.sicr)[3]))
-sicr.r0 <- sicr.beta/sicr.gamma
+sicr.eta <- as.numeric(exp(coef(fit.sicr)[4]))
+sicr.r0 <- sicr.beta/(sicr.gamma + sicr.zeta)
 sicr.nll <- as.numeric(logLik(fit.sicr))
 sicr.aic <- AIC(fit.sicr)
+
+################################################################################
+# SICR with no vital dynamics (mu = 0)                                         #
+################################################################################
+
+closed.seicr <- function(t, states, params) {
+    s0 <- states[1]
+    e0 <- states[2]
+    i0 <- states[3]
+    c0 <- states[4]
+    r0 <- states[5]
+
+    beta <- params[1]
+    gamma <- params[2]
+    zeta <- params[3]
+    eta <- params[4]
+    sigma <- params[5]
+    mu <- 0
+
+    dS <- mu - beta * s0 * i0 - mu * s0
+    dE <- beta * s0 * i0 - (mu + sigma) * e0
+    dI <- sigma * e0 - (mu + gamma + eta) * i0
+    dC <- eta * i0 - zeta * c0
+    dR <- gamma * i0 + zeta * c0 - mu * r0
+    list(c(dS, dE, dI, dC, dR))
+}
+
+# mle.seicr - function to use for maximum likelihood estimation. Returns negative 
+#             log-likelihood which is used to optimize coefficients 
+mle.seicr <- function(b, g, z, e, s) {
+    t <- seq(0, 14)    
+    beta <- exp(b)
+    gamma <- exp(g)
+    zeta <- exp(z)
+    eta <- exp(e)
+    sigma <- exp(s)
+
+    results <- as.data.frame(ode(y=c(S=761, E=1, I=1, C=0, R=0), 
+                             times=t, 
+                             closed.seicr,
+                             parms=c(beta, gamma, zeta, eta, sigma)))
+    nll <- -sum(dpois(x=flu.data$cases, lambda=tail(results$C, 14), log=TRUE))
+    return(nll)
+}
+
+initial <- list(b=-4.98, g=-10.71, z=-0.71, e=-0.34, s=-0.35)
+fit0.seicr <- mle2(mle.seicr, start=initial)
+
+fit.seicr <- mle2(mle.seicr, start=as.list(coef(fit0.seicr)))
+
+pred.seicr <- as.data.frame(ode(c(S=761, E=1, I=1, C=0, R=0), 
+                               times=seq(0, 14, 0.5), 
+                               closed.seicr,
+                               parms=c(exp(coef(fit.seicr)))))
+
+png("seicr-model.png")
+plot(cases~day, data=flu.data, type="b", ylab="Number of Infecteds")
+lines(pred.seicr$C~pred.seicr$time, col="red")
+dev.off()
+
+seicr.beta <- as.numeric(exp(coef(fit.seicr)[1])*763)
+seicr.gamma <- as.numeric(exp(coef(fit.seicr)[2]))
+seicr.zeta <- as.numeric(exp(coef(fit.seicr)[3]))
+seicr.eta <- as.numeric(exp(coef(fit.seicr)[4]))
+seicr.r0 <- seicr.beta/(seicr.gamma + seicr.zeta)
+seicr.nll <- as.numeric(logLik(fit.seicr))
+seicr.aic <- AIC(fit.seicr)
 
 ################################################################################
 # Create LateX table with xtable for all models and accompanying values        #
