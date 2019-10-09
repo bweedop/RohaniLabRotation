@@ -267,18 +267,17 @@ plot.grid <- function(baseline, amp, g) {
 
 for (i in lmh.gamma) {
     par(mfrow = c(3,3))
-    for(j in lmh.beta0) {
-        for (k in lmh.beta1) {
+    for(j in lmh.beta1) {
+        for (k in lmh.beta0) {
             temp <- plot.grid(baseline = j, amp = k, g = i)
-            if(i == lmh.beta0[1]) {
+            if(k == lmh.beta0[1]) {
                 par(mai = c(1, 0.6, 0.1, 0.1))
                 plot(temp$I ~ temp$time, 
                      type = "l", 
                      col = "red",
                      xaxt = "n", 
                      xlab = "", 
-                     ylab = "I",
-                     ylim = c(0, 0.0007))
+                     ylab = "I")
             } else {
                 par(mai = c(1, 0.1, 0.1, 0.1))
                 plot(temp$I ~ temp$time, 
