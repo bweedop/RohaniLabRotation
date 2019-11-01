@@ -180,3 +180,340 @@ output file: 2019-10-06-seasonal-epidemics-bifurcation.knit.md
 /usr/bin/pandoc +RTS -K512m -RTS 2019-10-06-seasonal-epidemics-bifurcation.utf8.md --to latex --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2019-10-06-seasonal-epidemics-bifurcation.tex --template /home/bodieweedop/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/latex/default-1.15.2.tex --highlight-style tango --latex-engine pdflatex --variable graphics=yes --variable 'geometry:margin=1in' --variable 'compact-title:yes' 
 
 Output created: 2019-10-06-seasonal-epidemics-bifurcation.pdf
+
+
+processing file: 2019-10-06-seasonal-epidemics-bifurcation.rmd
+  |                                                                         |                                                                 |   0%  |                                                                         |..                                                               |   4%
+  ordinary text without R code
+
+  |                                                                         |.....                                                            |   7%
+label: unnamed-chunk-1 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |.......                                                          |  11%
+  ordinary text without R code
+
+  |                                                                         |..........                                                       |  15%
+label: unnamed-chunk-2 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |............                                                     |  19%
+  ordinary text without R code
+
+  |                                                                         |..............                                                   |  22%
+label: unnamed-chunk-3 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |.................                                                |  26%
+  ordinary text without R code
+
+  |                                                                         |...................                                              |  30%
+label: unnamed-chunk-4 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |......................                                           |  33%
+  ordinary text without R code
+
+  |                                                                         |........................                                         |  37%
+label: unnamed-chunk-5 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |..........................                                       |  41%
+  ordinary text without R code
+
+  |                                                                         |.............................                                    |  44%
+label: unnamed-chunk-6 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |...............................                                  |  48%
+  ordinary text without R code
+
+  |                                                                         |..................................                               |  52%
+label: unnamed-chunk-7 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |....................................                             |  56%
+  ordinary text without R code
+
+  |                                                                         |.......................................                          |  59%
+label: unnamed-chunk-8 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |.........................................                        |  63%
+  ordinary text without R code
+
+  |                                                                         |...........................................                      |  67%
+label: unnamed-chunk-9 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |..............................................                   |  70%
+  ordinary text without R code
+
+  |                                                                         |................................................                 |  74%
+label: unnamed-chunk-10 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |...................................................              |  78%
+  ordinary text without R code
+
+  |                                                                         |.....................................................            |  81%
+label: unnamed-chunk-11 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |.......................................................          |  85%
+  ordinary text without R code
+
+  |                                                                         |..........................................................       |  89%
+label: unnamed-chunk-12 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |............................................................     |  93%
+  ordinary text without R code
+
+  |                                                                         |...............................................................  |  96%
+label: unnamed-chunk-13 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |.................................................................| 100%
+  ordinary text without R code
+
+
+output file: 2019-10-06-seasonal-epidemics-bifurcation.knit.md
+
+/usr/bin/pandoc +RTS -K512m -RTS 2019-10-06-seasonal-epidemics-bifurcation.utf8.md --to latex --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2019-10-06-seasonal-epidemics-bifurcation.tex --template /home/bodieweedop/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/latex/default-1.15.2.tex --highlight-style tango --latex-engine pdflatex --variable graphics=yes --variable 'geometry:margin=1in' --variable 'compact-title:yes' 
+
+Output created: 2019-10-06-seasonal-epidemics-bifurcation.pdf
+
+
+processing file: 2019-10-06-seasonal-epidemics-bifurcation.rmd
+  |                                                                         |                                                                 |   0%  |                                                                         |..                                                               |   4%
+  ordinary text without R code
+
+  |                                                                         |.....                                                            |   7%
+label: unnamed-chunk-1 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |.......                                                          |  11%
+  ordinary text without R code
+
+  |                                                                         |..........                                                       |  15%
+label: unnamed-chunk-2 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |............                                                     |  19%
+  ordinary text without R code
+
+  |                                                                         |..............                                                   |  22%
+label: unnamed-chunk-3 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |.................                                                |  26%
+  ordinary text without R code
+
+  |                                                                         |...................                                              |  30%
+label: unnamed-chunk-4 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |......................                                           |  33%
+  ordinary text without R code
+
+  |                                                                         |........................                                         |  37%
+label: unnamed-chunk-5 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |..........................                                       |  41%
+  ordinary text without R code
+
+  |                                                                         |.............................                                    |  44%
+label: unnamed-chunk-6 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |...............................                                  |  48%
+  ordinary text without R code
+
+  |                                                                         |..................................                               |  52%
+label: unnamed-chunk-7 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |....................................                             |  56%
+  ordinary text without R code
+
+  |                                                                         |.......................................                          |  59%
+label: unnamed-chunk-8 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |.........................................                        |  63%
+  ordinary text without R code
+
+  |                                                                         |...........................................                      |  67%
+label: unnamed-chunk-9 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |..............................................                   |  70%
+  ordinary text without R code
+
+  |                                                                         |................................................                 |  74%
+label: unnamed-chunk-10 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |...................................................              |  78%
+  ordinary text without R code
+
+  |                                                                         |.....................................................            |  81%
+label: unnamed-chunk-11 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |.......................................................          |  85%
+  ordinary text without R code
+
+  |                                                                         |..........................................................       |  89%
+label: unnamed-chunk-12 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |............................................................     |  93%
+  ordinary text without R code
+
+  |                                                                         |...............................................................  |  96%
+label: unnamed-chunk-13 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |.................................................................| 100%
+  ordinary text without R code
+
+
+output file: 2019-10-06-seasonal-epidemics-bifurcation.knit.md
+
+/usr/bin/pandoc +RTS -K512m -RTS 2019-10-06-seasonal-epidemics-bifurcation.utf8.md --to latex --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2019-10-06-seasonal-epidemics-bifurcation.tex --template /home/bodieweedop/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/latex/default-1.15.2.tex --highlight-style tango --latex-engine pdflatex --variable graphics=yes --variable 'geometry:margin=1in' --variable 'compact-title:yes' 
+
+Output created: 2019-10-06-seasonal-epidemics-bifurcation.pdf
+
+
+processing file: 2019-10-06-seasonal-epidemics-bifurcation.rmd
+  |                                                                         |                                                                 |   0%  |                                                                         |...                                                              |   4%
+  ordinary text without R code
+
+  |                                                                         |.....                                                            |   8%
+label: unnamed-chunk-1 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |........                                                         |  12%
+  ordinary text without R code
+
+  |                                                                         |...........                                                      |  17%
+label: unnamed-chunk-2 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |..............                                                   |  21%
+  ordinary text without R code
+
+  |                                                                         |................                                                 |  25%
+label: unnamed-chunk-3 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |...................                                              |  29%
+  ordinary text without R code
+
+  |                                                                         |......................                                           |  33%
+label: unnamed-chunk-4 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |........................                                         |  38%
+  ordinary text without R code
+
+  |                                                                         |...........................                                      |  42%
+label: unnamed-chunk-5 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |..............................                                   |  46%
+  ordinary text without R code
+
+  |                                                                         |................................                                 |  50%
+label: unnamed-chunk-6 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |...................................                              |  54%
+  ordinary text without R code
+
+  |                                                                         |......................................                           |  58%
+label: unnamed-chunk-7 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |.........................................                        |  62%
+  ordinary text without R code
+
+  |                                                                         |...........................................                      |  67%
+label: unnamed-chunk-8 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |..............................................                   |  71%
+  ordinary text without R code
+
+  |                                                                         |.................................................                |  75%
+label: unnamed-chunk-9 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |...................................................              |  79%
+  ordinary text without R code
+
+  |                                                                         |......................................................           |  83%
+label: unnamed-chunk-10 (with options) 
+List of 1
+ $ echo: logi TRUE
+
+  |                                                                         |.........................................................        |  88%
+  ordinary text without R code
+
+  |                                                                         |............................................................     |  92%
+label: unnamed-chunk-11 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |..............................................................   |  96%
+label: unnamed-chunk-12 (with options) 
+List of 1
+ $ echo: logi FALSE
+
+  |                                                                         |.................................................................| 100%
+  ordinary text without R code
+
+
+output file: 2019-10-06-seasonal-epidemics-bifurcation.knit.md
+
+/usr/bin/pandoc +RTS -K512m -RTS 2019-10-06-seasonal-epidemics-bifurcation.utf8.md --to latex --from markdown+autolink_bare_uris+tex_math_single_backslash --output 2019-10-06-seasonal-epidemics-bifurcation.tex --template /home/bodieweedop/R/x86_64-pc-linux-gnu-library/3.6/rmarkdown/rmd/latex/default-1.15.2.tex --highlight-style tango --latex-engine pdflatex --variable graphics=yes --variable 'geometry:margin=1in' --variable 'compact-title:yes' 
+
+Output created: 2019-10-06-seasonal-epidemics-bifurcation.pdf
